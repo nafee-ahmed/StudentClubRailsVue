@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
   post '/auth/login', to: 'auth#login'
+  get '/users/test', to: 'users#test'
   resources :users
-  post '/users/test', to: 'users#test', method: 'POST'
 end

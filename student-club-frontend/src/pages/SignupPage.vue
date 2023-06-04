@@ -66,6 +66,9 @@
           >
             {{ v$.confirmPassword.$errors[0].$message }}
           </p>
+          <p class="text-red-500 text-xs italic" v-if="authStore !== null">
+            {{ authStore.error }}
+          </p>
         </div>
         <p class="text-sm font-light text-gray-500">
           Already have an account?
@@ -96,13 +99,8 @@ import logoImg from "../assets/clubLogo.png";
 import InputField from "../components/InputField.vue";
 import AuthButton from "../components/AuthButton.vue";
 import useVuelidate from "@vuelidate/core";
-import {
-  required,
-  email,
-  sameAs,
-  minLength,
-  helpers,
-} from "@vuelidate/validators";
+import { required, email, sameAs, minLength } from "@vuelidate/validators";
+import { useAuthStore } from "../stores/AuthStore";
 
 export default {
   components: { InputField, AuthButton },
@@ -125,17 +123,17 @@ export default {
       };
     });
     const v$ = useVuelidate(rules, inputState);
+    const authStore = useAuthStore();
 
     const handleSignup = async () => {
       const isFormCorrect = await v$.value.$validate();
       if (!isFormCorrect) return;
-      alert(
-        JSON.stringify({
-          name: inputState.name,
-          password: inputState.password,
-          email: inputState.email,
-        })
-      );
+      await authStore.signup({
+        name: inputState.name,
+        password: inputState.password,
+        email: inputState.email,
+        password_confirmation: inputState.confirmPassword,
+      });
     };
 
     return {
@@ -145,6 +143,7 @@ export default {
       inputState,
       v$,
       handleSignup,
+      authStore,
     };
   },
 };
