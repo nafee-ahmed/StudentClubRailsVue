@@ -11,19 +11,19 @@ function request(method) {
   return (url, body) => {
     const requestOptions = {
       method,
-      headers: authHeader(url),
+      headers: getAuthHeader(url),
     };
     if (body) {
       requestOptions.headers["Content-Type"] = "application/json";
       requestOptions.body = JSON.stringify(body);
     }
-    return fetch(url, requestOptions).then(handleResponse);
+    return fetch(url, requestOptions).then(handleErrorResponse);
   };
 }
 
 // helper functions
 
-function authHeader(url) {
+function getAuthHeader(url) {
   // return auth header with jwt if user is logged in and request is to the api url
   const { token } = useAuthStore();
   if (token) {
@@ -33,7 +33,7 @@ function authHeader(url) {
   }
 }
 
-function handleResponse(response) {
+function handleErrorResponse(response) {
   return response.text().then((text) => {
     const data = text && JSON.parse(text);
 
