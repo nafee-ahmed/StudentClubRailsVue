@@ -8,4 +8,7 @@ class User < ApplicationRecord
   validates :password_digest, presence: true
   validates :password, length: { minimum: 6 }
   validates :password_confirmation, presence: true
+
+  has_many :user_clubs
+  has_many :clubs, through: :user_clubs
 end

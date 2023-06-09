@@ -72,12 +72,12 @@
         </div>
         <p class="text-sm font-light text-gray-500">
           Already have an account?
-          <a class="font-medium text-primaryColor hover:underline" href=""
+          <a class="font-medium text-primaryColor hover:underline" href="/login"
             >Login</a
           >
         </p>
         <div class="my-2">
-          <auth-button text="Sign Up" />
+          <auth-button text="Sign Up" :is-disabled="authStore.loading" />
         </div>
       </form>
     </div>
